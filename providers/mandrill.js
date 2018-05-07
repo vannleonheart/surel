@@ -37,7 +37,7 @@ const send = (mandrillClient, configs = {}) => (mailer, callback) => {
     const sendOptions = mailer && mailer.data && mailer.data.data && mailer.data.data.options ? mailer.data.data.options : {};
     const options = Object.assign({}, configOptions, sendOptions);
     const templateName = mailer && mailer.data && mailer.data.data && mailer.data.data.templateName ? mailer.data.data.templateName : null;
-    const templateData = mailer && mailer.data && mailer.data.data && mailer.data.data.templateData ? mailer.data.data.templateData : {};
+    const templateData = mailer && mailer.data && mailer.data.data && mailer.data.data.templateData ? mailer.data.data.templateData : [];
     const html = mailer && mailer.data && mailer.data.data && mailer.data.data.html ? mailer.data.data.html : null;
     const text = mailer && mailer.data && mailer.data.data && mailer.data.data.text ? mailer.data.data.text : null;
 
