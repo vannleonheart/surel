@@ -1,8 +1,8 @@
 const path = require('path');
 const nodemailer = require('nodemailer');
 
-const sendMail = transporter => (to, subject, data = {}) => new Promise((resolve, reject) => {
-    transporter.sendMail({ to, subject, data }, (err, result) => {
+const sendMail = transporter => data => new Promise((resolve, reject) => {
+    transporter.sendMail(data, (err, result) => {
         if (err) {
             return reject(err);
         }

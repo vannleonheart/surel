@@ -1,7 +1,9 @@
-const mandrill = require('mandrill-api/mandrill');
+const path = require('path');
+const mailgun = require('mailgun-js');
+const compile = require('./../compile')('ejs');
 
-const send = (mandrillClient, configs = {}) => (mailer, callback) => {
-    const from = {
+const send = (mailgunClient, configs = {}) => (mailer, callback) => {
+    let from = {
         name: null,
         email: null
     };
@@ -43,16 +45,13 @@ const send = (mandrillClient, configs = {}) => (mailer, callback) => {
     const to = [];
 
     if (mailer && mailer.data && mailer.data.to && typeof mailer.data.to === 'string') {
-        to.push({
-            email: mailer.data.to,
-            type: 'to'
-        });
+        to.push(mailer.data.to);
     }
 
     if (to.length <= 0) {
         return callback(new Error('ERROR_TARGET_NOT_SET'));
     }
-    
+
     const configOptions = configs && configs.options ? configs.options : {};
     const sendOptions = mailer && mailer.data && mailer.data.options ? mailer.data.options : {};
     const options = Object.assign({}, configOptions, sendOptions);
@@ -65,45 +64,34 @@ const send = (mandrillClient, configs = {}) => (mailer, callback) => {
 
     const message = {
         subject: mailer.data.subject,
-        from_email: from.email,
-        from_name: from.name,
-        to,
-        headers: options.headers || {},
-        important: options.important || false,
-        track_opens: options.track_opens || true,
-        track_clicks: options.track_clicks || true
+        from: from.name ? `${from.name} <${from.email}>` : from.email,
+        html,
+        text,
+        to: to.join(', ')
     };
 
-    message.global_merge_vars = templateData;
+    const templateFileOrHtml = configs.templateDir ? templateName : message.html;
 
-    if (templateName) {
-        return mandrillClient.messages.sendTemplate({
-            template_name: templateName,
-            template_content: [],
-            message,
-            async: options.async || true
-        }, result => callback(null, result), err => callback(err));
-    }
+    compile(templateFileOrHtml, templateData, configs.templateDir).then(compiledHtml => {
+        message.html = compiledHtml;
 
-    message.html = html;
-    message.text = text;
-
-    return mandrillClient.messages.send({
-        message,
-        async: options.async || true
-    }, result => callback(null, result), err => callback(err));
+        mailgunClient.messages().send(message, callback);
+    }).catch(err => callback(err));
 }
 
 module.exports = configs => {
     const { credential = {} } = configs;
-    const { API_KEY } = credential;
-    const mandrillClient = new mandrill.Mandrill(API_KEY);
+    const { API_KEY, DOMAIN } = credential;
     const mailer = {};
+    const mailgunClient = mailgun({
+        apiKey: API_KEY,
+        domain: DOMAIN
+    });
 
     mailer.transporter = {
-        name: 'mandrill',
+        name: 'mailgun',
         version: '0.0.10',
-        send: send(mandrillClient, configs)
+        send: send(mailgunClient, configs)
     }
 
     return mailer;
