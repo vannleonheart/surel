@@ -13,6 +13,7 @@
         "ejs": "2.6.1",
         "mailgun-js": "0.18.0",
         "mandrill-api": "1.0.45",
-        "nodemailer": "4.6.4"
+        "nodemailer": "4.6.4",
+        "sparkpost": "2.1.2"
     }
 }
