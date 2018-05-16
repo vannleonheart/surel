@@ -1,19 +1,35 @@
 {
     "name": "surel",
     "version": "0.0.11",
-    "description": "",
+    "description": "Sending email with ease",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "surel",
+        "email",
+        "mailgun",
+        "mandrill",
+        "sparkpost"
+    ],
+    "author": {
+        "name": "Bontor Sianipar",
+        "email": "vannleonheart@gmail.com"
+    },
+    "engines": {
+        "node": ">=7"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vannleonheart/surel.git"
+    },
     "license": "ISC",
     "dependencies": {
-        "ejs": "2.6.1",
-        "mailgun-js": "0.18.0",
-        "mandrill-api": "1.0.45",
-        "nodemailer": "4.6.4",
-        "sparkpost": "2.1.2"
+        "ejs": "^2.6.1",
+        "mailgun-js": "^0.18.0",
+        "mandrill-api": "^1.0.45",
+        "nodemailer": "^4.6.4",
+        "sparkpost": "^2.1.2"
     }
 }
