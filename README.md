@@ -107,3 +107,44 @@ Mandrill.send({
     ]
 });
 ```
+
+### Amazon SES Provider
+Sending Email
+```js
+const SES = surel('aws_ses', {
+    from: 'Your Name <no-reply@your_registered_domain.com>',
+    credential: {
+        accessKeyId: 'YOUR_AWS_SES_ACCESS_KEY_ID',
+        secretAccessKey: 'YOUR_AWS_SES_ACCESS_KEY_SECRET',
+        region: 'YOUR_AWS_SES_REGION',
+    }
+});
+
+SES.send({
+    to: 'your_target_email@domain.com',
+    subject: 'Using surel is easy',
+    html: '<html><head></head><body>This is email content in html.</body></html>',
+    text: 'This is email content in plain text.'
+});
+```
+Sending Email With Available Template
+```js
+const SES = surel('aws_ses', {
+    from: 'Your Name <no-reply@your_registered_domain.com>',
+    credential: {
+        accessKeyId: 'YOUR_AWS_SES_ACCESS_KEY_ID',
+        secretAccessKey: 'YOUR_AWS_SES_ACCESS_KEY_SECRET',
+        region: 'YOUR_AWS_SES_REGION',
+    },
+    templateDir: 'YOUR_LOCAL_DIRECTORY_CONTAINS_EJS_FILE'
+});
+
+SES.send({
+    to: 'your_target_email@domain.com',
+    subject: 'Using surel is easy',
+    templateName: 'YOUR TEMPLATE NAME',
+    templateData:[
+        { name: 'variable_1', content: 'substitute variable_1 with this' }
+    ]
+});
+```

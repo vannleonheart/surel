@@ -26,6 +26,7 @@
     },
     "license": "ISC",
     "dependencies": {
+        "aws-sdk": "^2.335.0",
         "ejs": "^2.6.1",
         "mailgun-js": "^0.18.0",
         "mandrill-api": "^1.0.45",
